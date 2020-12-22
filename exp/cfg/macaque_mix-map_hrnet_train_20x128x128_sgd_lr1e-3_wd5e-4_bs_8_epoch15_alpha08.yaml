@@ -1,0 +1,108 @@
+CUDNN:
+  BENCHMARK: true
+  DETERMINISTIC: false
+  ENABLED: true
+GPUS: (0, 1, 2, 3)
+WORKERS: 4
+PRINT_FREQ: 10
+OUTPUT_DIR: '/output'
+LOG_DIR: '/output/log_tb'
+
+
+DATA:
+  DATASET: 'macaque'
+  NUM_CLASSES: 2
+  DATA_PATH: '/data/dongmeng/InstSeg_Macaque/merge_20_128_128-0307/h5data'
+  TRAIN_SET: '/data/dongmeng/InstSeg_Macaque/merge_20_128_128-0307/train.txt'
+  TEST_SET: '/data/dongmeng/InstSeg_Macaque/merge_20_128_128-0307/valid.txt'
+  MEAN:
+  - 559.
+  - 481.
+  VAR:
+  - 694.
+  - 248.6
+  LOG_PARA: 1000.
+  PEAK_ALPHA: 0.8
+
+
+MODEL:
+  NAME: seg_hrnet
+  IN_CHANNELS: 2
+  PRETRAINED: ''
+  EXTRA:
+    STEM_INPLANES: 48 #64
+    FINAL_CONV_KERNEL: 1
+    STAGE2:
+      NUM_MODULES: 1
+      NUM_BRANCHES: 2
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 1
+      - 1
+      NUM_CHANNELS:
+      - 6
+      - 12
+      FUSE_METHOD: SUM
+    STAGE3:
+      NUM_MODULES: 1
+      NUM_BRANCHES: 3
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 1
+      - 1
+      - 1
+      NUM_CHANNELS:
+      - 6
+      - 12
+      - 24
+      FUSE_METHOD: SUM
+    STAGE4:
+      NUM_MODULES: 1
+      NUM_BRANCHES: 4
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 1
+      - 1
+      - 1
+      - 1
+      NUM_CHANNELS:
+      - 6
+      - 12
+      - 24
+      - 48
+      FUSE_METHOD: SUM
+
+TRAIN:
+  BATCH_SIZE_PER_GPU: 2
+  BATCH_SIZE: 8
+  IMAGE_SIZE:
+  - 20
+  - 128
+  - 128
+  LOSS_WEIGHT:
+  - 1.
+  - 0.5
+  - 1.
+  - 1.
+  SHUFFLE: true
+  BEGIN_EPOCH: 0
+  END_EPOCH: 15
+  RESUME: false
+  OPTIMIZER: sgd
+  LR: 0.001
+  WD: 0.0005
+  MOMENTUM: 0.9
+  NESTEROV: false
+  METHOD: 'ours'
+TEST:
+  IMAGE_SIZE:
+  - 32
+  - 128
+  - 128
+  BATCH_SIZE_PER_GPU: 1
+  DATA_PATH: '/data/dongmeng/InstSeg_Macaque/merge_20_128_128-0307/test/'
+  PRM_ON: false
+  MODEL_FILE: ''
+  FINAL_OUTPUT_PATH: '/output/test'
+  PRM_OUTPUT_PATH: ''
+
