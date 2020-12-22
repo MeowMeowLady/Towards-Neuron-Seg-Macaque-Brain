@@ -1,4 +1,4 @@
-# Towards-Neuro-Seg-Macaque-Brain
+# Towards-Neuron-Seg-Macaque-Brain
 Towards neuron segmentation from macaque brain images: a weakly supervised approach
 
 For the HR-Net Part, we referred to the public code from https://github.com/HRNet/HRNet-Semantic-Segmentation.
